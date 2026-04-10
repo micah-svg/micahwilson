@@ -106,6 +106,64 @@
         .btn:hover { background: var(--accent-hover); }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-outline:hover { background: var(--accent); color: var(--bg); }
+        .btn-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 520px;
+            width: 90%;
+            text-align: left;
+            position: relative;
+        }
+        .modal-box h2 {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        .modal-box p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0 0 12px;
+        }
+        .modal-box .lets-go {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-top: 20px;
+        }
+        .modal-close {
+            display: inline-block;
+            margin-top: 24px;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 10px 28px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: var(--accent-hover); }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.2rem; }
@@ -125,8 +183,14 @@
                 I turn "what if" into "here's how."
             </p>
             <div class="links">
-                <a href="https://github.com/micah-svg" class="btn"><i class="fab fa-github" aria-hidden="true"></i> View My Commits</a>
-                <a href="mailto:micahmariewilson@gmail.com" class="btn btn-outline">Contact Me</a>
+                <div class="btn-row">
+                    <a href="https://www.linkedin.com/in/micahmwilson/" class="btn btn-outline" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin" aria-hidden="true"></i> Connect on LinkedIn</a>
+                    <a href="Micah Wilson Resume 2026.pdf" class="btn btn-outline" download><i class="fas fa-file-alt" aria-hidden="true"></i> Download Resume</a>
+                    <a href="https://calendly.com/herway-micah/new-meeting" class="btn btn-outline" target="_blank" rel="noopener noreferrer"><i class="fas fa-calendar-check" aria-hidden="true"></i> Book Interview</a>
+                </div>
+                <div class="btn-row">
+                    <a href="https://github.com/micah-svg" class="btn" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> View Commits</a>
+                </div>
             </div>
         </header>
 
@@ -192,6 +256,56 @@
             <p>&copy; 2026 Micah Wilson. Built with efficiency in mind.</p>
         </footer>
     </div>
+
+    <!-- Non-Negotiables Modal -->
+    <div class="modal-overlay" id="nonNegotiableModal">
+        <div class="modal-box">
+            <h2>Before we go any further, you should know my non-negotiables:</h2>
+            <p>Do you have a hiring process that concludes within four weeks and involves no more than two interview rounds?</p>
+            <p>Is your hiring process free of unpaid work samples, assignments, or assessments of any kind?</p>
+            <p class="lets-go">If so... let's go!</p>
+            <button class="modal-close" id="modalCloseBtn">Got It</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            var modal = document.getElementById('nonNegotiableModal');
+            var closeBtn = document.getElementById('modalCloseBtn');
+            var buttons = document.querySelectorAll('.btn');
+
+            buttons.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var targetBtn = btn;
+                    modal.classList.add('active');
+
+                    closeBtn.onclick = function() {
+                        modal.classList.remove('active');
+                        // Proceed with the original action
+                        if (targetBtn.hasAttribute('download')) {
+                            var link = document.createElement('a');
+                            link.href = targetBtn.href;
+                            link.download = '';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        } else if (targetBtn.getAttribute('target') === '_blank') {
+                            window.open(targetBtn.href, '_blank', 'noopener,noreferrer');
+                        } else {
+                            window.location.href = targetBtn.href;
+                        }
+                    };
+                });
+            });
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        })();
+    </script>
 
 </body>
 </html>
